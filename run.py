@@ -1,13 +1,17 @@
 import subprocess
+import os
+home = '/home/pi'
+server = 'Public/NodeJS-Server'
 print ('Installing git-core\n')
 subprocess.call(['sudo','apt-get','install','-y','git-core'])
 
 print ('\nCloning wiringPi\n')
-subprocess.call(['mkdir', '/wiringPi'])
 subprocess.call(['git','clone','git://git.drogon.net/wiringPi','~/wiringPi'])
 
 print ('\nInstalling Wiring-Pi\n')
-subprocess.call('cd ~/wiringPi | ./build', shell=True)
+os.chdir('~/wiringPi')
+subprocess.call('sudo ./build', shell=True)
+os.chdir(home)
 
 '''print ('\nInstalling 433Utils\n')
 subprocess.call('mkdir /433Utils | git clone --recursive git://github.com/ninjablocks/433Utils.git ~/433Utils', shell=True)
@@ -26,9 +30,11 @@ subprocess.call('mkdir /home/pi/Public/NodeJS-Server | git clone git://github.co
 print ('\nInstalling PM2\n')
 subprocess.call('sudo npm install pm2 -g', shell=True)
 subprocess.call('sudo pm2 startup', shell=True)
+os.chdir(server)
 subprocess.call('sudo pm2 start Public/NodeJS-Server/bin/www', shell=True)
 subprocess.call('sudo pm2 start Public/NodeJS-Server/request.js', shell=True)
 subprocess.call('sudo pm2 save', shell=True)
+os.chdir(home)
 
 print ('\nInstalling Hostapd & dnsmasq\n')
 subprocess.call('sudo cp /home/pi/SettingBackup/dnsmasq.conf /etc/dnsmasq.conf', shell=True)
