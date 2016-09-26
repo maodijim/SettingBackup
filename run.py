@@ -9,7 +9,7 @@ print ('\nCloning wiringPi\n')
 subprocess.call(['git','clone','git://git.drogon.net/wiringPi'])
 
 print ('\nInstalling Wiring-Pi\n')
-os.chdir('~/wiringPi')
+os.chdir('/wiringPi')
 subprocess.call('sudo ./build', shell=True)
 os.chdir(home)
 
