@@ -21,7 +21,7 @@ subprocess.call('curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -'
 subprocess.call(['sudo','apt-get','install','-y','nodejs'])
 
 print ('\nInstalling WirelessHome Server\n')
-subprocess.call('mkdir /home/pi/Public/NodeJS-Server | git clone git://github.com/maodijim/NodeJS-Server/Public/NodeJS-Server', shell=True)
+subprocess.call('mkdir /home/pi/Public/NodeJS-Server | git clone git://github.com/maodijim/NodeJS-Server Public/NodeJS-Server', shell=True)
 
 print ('\nInstalling PM2\n')
 subprocess.call('sudo npm install pm2 -g', shell=True)
