@@ -26,8 +26,8 @@ subprocess.call('mkdir /home/pi/Public/NodeJS-Server | git clone git://github.co
 print ('\nInstalling PM2\n')
 subprocess.call('sudo npm install pm2 -g', shell=True)
 subprocess.call('sudo pm2 startup', shell=True)
-subprocess.call('sudo pm2 start bin/www', shell=True)
-subprocess.call('sudo pm2 start request.js', shell=True)
+subprocess.call('sudo pm2 start Public/NodeJS-Server/bin/www', shell=True)
+subprocess.call('sudo pm2 start Public/NodeJS-Server/request.js', shell=True)
 subprocess.call('sudo pm2 save', shell=True)
 
 print ('\nInstalling Hostapd & dnsmasq\n')
