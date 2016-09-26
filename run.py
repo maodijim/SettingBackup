@@ -48,3 +48,4 @@ subprocess.call('sudo chmod 744 /home/pi/Public/NodeJS-Server/codesend', shell=T
 subprocess.call('sudo crontab /home/pi/SettingBackup/crontabBackup', shell=True)
 subprocess.call('sudo cp /home/pi/SettingBackup/hosts /etc/hosts', shell=True)
 subprocess.call('sudo hostnamectl set-hostname WirelessHome', shell=True)
+subprocess.call('sudo python Public/NodeJS-Server/fileCheck.py', shell=True)
