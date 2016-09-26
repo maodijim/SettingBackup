@@ -6,7 +6,7 @@ print ('Installing git-core\n')
 subprocess.call(['sudo','apt-get','install','-y','git-core'])
 
 print ('\nCloning wiringPi\n')
-subprocess.call(['git','clone','git://git.drogon.net/wiringPi','~/wiringPi'])
+subprocess.call(['git','clone','git://git.drogon.net/wiringPi','/wiringPi'])
 
 print ('\nInstalling Wiring-Pi\n')
 os.chdir('~/wiringPi')
