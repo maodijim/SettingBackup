@@ -14,7 +14,7 @@ subprocess.call('sudo ./build', shell=True)
 os.chdir(home)
 
 '''print ('\nInstalling 433Utils\n')
-subprocess.call('mkdir /433Utils | git clone --recursive git://github.com/ninjablocks/433Utils.git ~/433Utils', shell=True)
+subprocess.call('mkdir /433Utils | git clone --recursive git://github.com/ninjablocks/433Utils.git /433Utils', shell=True)
 subprocess.call('cd /433Utils/RPi_utils | make', shell=True)'''
 
 print ('\nInstalling XRDP\n')
