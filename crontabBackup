@@ -23,5 +23,6 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 # For more information see the manual pages of crontab(5) and cron(8)
 #
 # m h  dom mon dow   command
-*/2 * * * * python /home/pi/Public/NodeJS-Server/wifiCheck.py check
+*/1 * * * * python /home/pi/Public/NodeJS-Server/wifiCheck.py check
 */1 * * * * python /home/pi/Public/NodeJS-Server/fileCheck.py
+@reboot python /home/pi/Public/NodeJS-Server/wifiCheck.py start
