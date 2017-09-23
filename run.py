@@ -60,6 +60,8 @@ subprocess.call('sudo hostnamectl set-hostname WirelessHome', shell=True)
 subprocess.call('sudo python Public/NodeJS-Server/fileCheck.py', shell=True)
 subprocess.call('sudo apt-get install python-mysqldb -y', shell=True)
 subprocess.call('sudo apt-get install mysql-server -y', shell=True)
+print ('\nDisabling wifi power save mode\n')
+subprocess.call('sudo iw dev wlan0 set power_save off', shell=True)
 import MySQLdb
 print('\nCreate Database')
 
