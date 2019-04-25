@@ -5,10 +5,10 @@ import os
 home = '/home/pi'
 server = 'Public/NodeJS-Server'
 print ('Installing git-core\n')
-subprocess.call(['sudo','apt-get','install','-y','git-core'])
+subprocess.call(['sudo', 'apt-get', 'install', '-y', 'git-core'])
 
 print ('\nCloning wiringPi\n')
-subprocess.call(['git','clone','git://git.drogon.net/wiringPi'])
+subprocess.call(['git', 'clone', 'git://git.drogon.net/wiringPi'])
 
 print ('\nInstalling Wiring-Pi\n')
 os.chdir('wiringPi')
@@ -20,11 +20,11 @@ subprocess.call('mkdir /433Utils | git clone --recursive git://github.com/ninjab
 subprocess.call('cd /433Utils/RPi_utils | make', shell=True)'''
 
 print ('\nInstalling XRDP\n')
-subprocess.call(['sudo','apt-get','install','-y','xrdp'])
+subprocess.call(['sudo', 'apt-get', 'install', '-y', 'xrdp'])
 
 print ('\nInstalling NodeJS')
-subprocess.call('curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -', shell=True)
-subprocess.call(['sudo','apt-get','install','-y','nodejs'])
+subprocess.call('curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -', shell=True)
+subprocess.call(['sudo', 'apt-get', 'install', '-y', 'nodejs'])
 
 print ('\nInstalling WirelessHome Server\n')
 subprocess.call('git clone git://github.com/maodijim/NodeJS-Server Public/NodeJS-Server', shell=True)
