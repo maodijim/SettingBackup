@@ -73,7 +73,7 @@ cur = db.cursor()
 
 cur.execute("create database switches")
 cur.execute("create table `switches`.`id` (id varchar(25));")
-cur.execute("create table `switches`.`devices` (`device` varchar(25) not null, `status` varchar(10) not null, `codeON` varchar(50) not null, `codeOFF` varchar(50), `nickname` varchar(50) not null)")
+cur.execute("create table `switches`.`devices` (`device` varchar(25) not null, `status` varchar(10) not null, `codeON` varchar(50) null, `codeOFF` varchar(50) null, `nickname` varchar(50) not null)")
 cur.execute("CREATE USER 'switch'@'localhost' IDENTIFIED BY 'newswitch'")
 cur.execute("GRANT ALL PRIVILEGES ON switches.* TO 'switch'@'localhost'identified by 'newswitch';")
 cur.execute("FLUSH PRIVILEGES")
