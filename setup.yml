@@ -1,101 +1,115 @@
 ---
-hosts: localhost
-connection: local
-become: true
+- hosts: localhost
+  become: true
 
-vars:
-  home: '/home/pi'
-  server_dir: 'Public/NodeJS-Server'
+  vars:
+    home: '/home/pi'
+    server_dir: 'Public/NodeJS-Server'
 
-tasks:
-  - name: Setup Node Repo
-    shell: curl -sL https://deb.nodesource.com/setup_16.x | bash
+  tasks:
+    - name: Setup Node Repo
+      shell: curl -sL https://deb.nodesource.com/setup_16.x | bash
 
-  - name: Install NPM
-    shell: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+    - name: Install NPM
+      shell: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
 
-  - name: Install require packages
-    apt:
-      name: "{{ item }}"
-      state: installed
-    loop:
-      - git-core
-      - git
-      - jq
-      - xrdp
-      - nodejs
-      - hostapd
-      - dnsmasq
-      - python-mysqldb
-      - mysql-server
+    - name: Install require packages
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - git-core
+        - git
+        - jq
+        - xrdp
+        - nodejs
+        - hostapd
+        - dnsmasq
+        - python-mysqldb
+        - mariadb-server
+        - mariadb-client
 
-  - name: Install RPI-RF
-    pip:
-      executable: pip3
-      name: rpi-rf
+    - name: Install RPI-RF
+      pip:
+        executable: pip3
+        name: rpi-rf
 
-  - name: Get NodeJS-Server
-    shell: git clone git://github.com/maodijim/NodeJS-Server {{ server_dir }}
-    chdir: "{{ home }}"
+    - name: Get NodeJS-Server
+      shell: git clone git://github.com/maodijim/NodeJS-Server {{ server_dir }}
+      register: command_result
+      failed_when:
+        - not command_result.rc == 128
+        - not command_result.rc == 0
+      ignore_errors: true
+      args:
+        chdir: "{{ home }}"
 
-  - name: Install PM2
-    shell: "{{ item }}"
-    loop:
-      - npm install pm2 -g
-      - pm2 startup
+    - name: Install Node Dependencies
+      shell: npm install
+      args:
+        chdir: "{{ home }}/{{ server_dir }}"
 
-  - name: Copy conf
-    shell: "{{ item }}"
-    loop:
-      - cp dnsmasq.conf /etc/dnsmasq.conf
-      - cp hostapd.conf /etc/hostapd/hostapd.conf
-      - cp hostapd /etc/init.d/hostapd
-      - sysctl -w net.ipv4.ip_forward=1
-      - interfaces1 /etc/network/interfaces1
-      - interfaces2 /etc/network/interfaces2
-      - chmod 744 {{ home }}/{{ server_dir }}/RFSniffer1
-      - chmod 744 {{ home }}/{{ server_dir }}/codesend
-      - crontab {{ home }}/{{ server_dir }}/crontabBackup
-      - cp config.json "{{ home }}/{{ server_dir }}/"
+    - name: Install PM2
+      shell: "{{ item }}"
+      loop:
+        - npm install pm2 -g
+        - pm2 startup
 
-  - name: Update wpa conf permission
-    file:
-      path: /etc/wpa_supplicant/wpa_supplicant.conf
-      mode: '0602'
+    - name: Copy conf
+      shell: "{{ item }}"
+      loop:
+        - cp dnsmasq.conf /etc/dnsmasq.conf
+        - cp hostapd.conf /etc/hostapd/hostapd.conf
+        - cp hostapd /etc/init.d/hostapd
+        - sysctl -w net.ipv4.ip_forward=1
+        - cp interfaces1 /etc/network/interfaces1
+        - cp interfaces2 /etc/network/interfaces2
+        - chmod 744 {{ home }}/{{ server_dir }}/RFSniffer1
+        - chmod 744 {{ home }}/{{ server_dir }}/codesend
+        - crontab crontabBackup
+        - cp config.json "{{ home }}/{{ server_dir }}/"
 
-  - name: Update Hostname
-    hostname:
-      name: "WirelessHome"
+    - name: Update wpa conf permission
+      file:
+        path: /etc/wpa_supplicant/wpa_supplicant.conf
+        mode: '0602'
 
-  - name: Install Docker
-    shell: curl -fsSL https://get.docker.com | bash
+    - name: Update Hostname
+      hostname:
+        name: "WirelessHome"
 
-  - name: Enable and Start Docker
-    systemd:
-      name: docker
-      state: started
-      enabled: yes
+    - name: Install Docker
+      shell: curl -fsSL https://get.docker.com | bash
 
-  - name: Install Docker Compose
-    apt:
-      name: docker-compose
-      state: installed
+    - name: Enable and Start Docker
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
 
-#   - name: Start Docker
-#     shell: docker-compose up -d
+    - name: Install Docker Compose
+      apt:
+        name: docker-compose
+        state: present
 
-  - name: PM2 start daemon
-    shell: "{{ item }}"
-    chdir: "{{ home }}/{{ server_dir }}"
-    loop:
-      - pm2 start bin/www
-      - pm2 start mqtt.js
-      - pm2 start led.py
-      - pm2 save
-      - iw dev wlan0 set power_save off
-      - python Public/NodeJS-Server/fileCheck.py
+  #   - name: Start Docker
+  #     shell: docker-compose up -d
+    - name: Run setup db
+      shell: python setup_db.py
 
-  - name: Remove dependencies that are no longer required
-    apt:
-      autoremove: yes
+    - name: PM2 start daemon
+      shell: "{{ item }}"
+      args:
+        chdir: "{{ home }}/{{ server_dir }}"
+      loop:
+        - pm2 start bin/www
+        - pm2 start mqtt.js
+        - pm2 start led.py
+        - pm2 save
+        - iw dev wlan0 set power_save off
+        - python {{ home }}/{{ server_dir }}/fileCheck.py
+
+    - name: Remove dependencies that are no longer required
+      apt:
+        autoremove: yes
 
