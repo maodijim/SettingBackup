@@ -103,7 +103,7 @@
         chdir: "{{ home }}/{{ server_dir }}"
       loop:
         - pm2 start bin/www
-        - pm2 start mqtt.js
+        - pm2 --cwd {{ home }}/{{ server_dir }} start mqtt.js
         - pm2 start led.py
         - pm2 save
         - iw dev wlan0 set power_save off
