@@ -26,4 +26,4 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 * * * * * python /home/pi/Public/NodeJS-Server/fileCheck.py
 @reboot /user/bin/python2.7 /home/pi/Public/NodeJS-Server/wifiCheck.py start
 @reboot sleep 30; sudo pm2 delete mqtt
-@reboot sleep 60;  sudo pm2 start /home/pi/Public/NodeJS-Server/mqtt.js
+@reboot sleep 60;  sudo pm2 --cwd /home/pi/Public/NodeJS-Server/ start /home/pi/Public/NodeJS-Server/mqtt.js
